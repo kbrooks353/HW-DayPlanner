@@ -23,47 +23,47 @@
         <!-- Timeblocks go here -->
         <div class="row">
             <div class="hour" id="9">9am</div>
-            <textarea name="9am" id=""></textarea>
+            <textarea name="9am" id="9"></textarea>
             <button class="saveBtn" type="submit" id="btn9am"></button>
         </div>
         <div class="row">
             <div class="hour" id="10">10am</div>
-            <textarea name="10am" id=""></textarea>
+            <textarea name="10am" id="10"></textarea>
             <button class="saveBtn" type="submit" id="btn10am"></button>
         </div>
         <div class="row">
             <div class="hour" id="11">11am</div>
-            <textarea name="11am" id=""></textarea>
+            <textarea name="11am" id="11"></textarea>
             <button class="saveBtn" type="submit" id="btn11am"></button>
         </div>
         <div class="row">
             <div class="hour" id="12">12pm</div>
-            <textarea name="12pm" id=""></textarea>
+            <textarea name="12pm" id="12"></textarea>
             <button class="saveBtn" type="submit" id="btn12pm"></button>
         </div>
         <div class="row">
             <div class="hour" id="13">1pm</div>
-            <textarea name="1pm" id=""></textarea>
+            <textarea name="1pm" id="13"></textarea>
             <button class="saveBtn" type="submit" id="btn1pm"></button>
         </div>
         <div class="row">
             <div class="hour" id="14">2pm</div>
-            <textarea name="2pm" id=""></textarea>
+            <textarea name="2pm" id="14"></textarea>
             <button class="saveBtn" type="submit" id="btn2pm"></button>
         </div>
         <div class="row">
             <div class="hour" id="15">3pm</div>
-            <textarea name="3pm" id=""></textarea>
+            <textarea name="3pm" id="15"></textarea>
             <button class="saveBtn" type="submit" id="btn3pm"></button>
         </div>
         <div class="row">
             <div class="hour" id="16">4pm</div>
-            <textarea name="4pm" id=""></textarea>
+            <textarea name="4pm" id="16"></textarea>
             <button class="saveBtn" type="submit" id="btn4pm"></button>
         </div>
         <div class="row">
             <div class="hour" id="17">5pm</div>
-            <textarea name="5pm" id=""></textarea>
+            <textarea name="5pm" id="17"></textarea>
             <button class="saveBtn" type="submit" id="btn5pm"></button>
         </div>
     </div>
@@ -119,15 +119,19 @@
                     // otherwise just add the end :00:00 to the number
                     return hour + ":00:00";
                 }
-                var hourDivs = $(".hour");
+                var hourDivs = $("textarea");
                 for (var i = 0; i < hourDivs.length; i++) {
                     var hourText = hourDivs[i].getAttribute("id");
-                   
+                    var currentHours = moment(currentTimeHours, format);
                     var checkTime = hourStringify(hourText);
                     var timeToCheck = moment(checkTime, format);
                     console.log(timeToCheck);
-                    if (timeToCheck.isBefore(currentTimeHours)) {
-                        hourDivs.append("class", "past");
+                    if (timeToCheck.isBefore(currentHours)) {
+                        $("textarea").attr("class", "past");
+                    }else if (timeToCheck.isSame(currentHours)){
+                        $("textarea").attr("class", "present");
+                    }else {
+                        $("textarea").attr("class", "future");
                     }
                 }
 
