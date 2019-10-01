@@ -22,75 +22,126 @@
     <div class="container">
         <!-- Timeblocks go here -->
         <div class="row">
-            <div class="hour">9am</div>
+            <div class="hour" id="9">9am</div>
             <textarea name="9am" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn9am"></button>
         </div>
         <div class="row">
-            <div class="hour">10am</div>
+            <div class="hour" id="10">10am</div>
             <textarea name="10am" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn10am"></button>
         </div>
         <div class="row">
-            <div class="hour">11am</div>
+            <div class="hour" id="11">11am</div>
             <textarea name="11am" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn11am"></button>
         </div>
         <div class="row">
-            <div class="hour">12pm</div>
+            <div class="hour" id="12">12pm</div>
             <textarea name="12pm" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn12pm"></button>
         </div>
         <div class="row">
-            <div class="hour">1pm</div>
+            <div class="hour" id="13">1pm</div>
             <textarea name="1pm" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn1pm"></button>
         </div>
         <div class="row">
-            <div class="hour">2pm</div>
+            <div class="hour" id="14">2pm</div>
             <textarea name="2pm" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn2pm"></button>
         </div>
         <div class="row">
-            <div class="hour">3pm</div>
+            <div class="hour" id="15">3pm</div>
             <textarea name="3pm" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn3pm"></button>
         </div>
         <div class="row">
-            <div class="hour">4pm</div>
+            <div class="hour" id="16">4pm</div>
             <textarea name="4pm" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn4pm"></button>
         </div>
         <div class="row">
-            <div class="hour">5pm</div>
+            <div class="hour" id="17">5pm</div>
             <textarea name="5pm" id=""></textarea>
             <button class="saveBtn" type="submit" id="btn5pm"></button>
         </div>
     </div>
-
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+
     <script>
-        $(".saveBtn").on("click", function (event) {
-            event.preventDefault();
-            var whichBtn = $(this).attr("id").replace("btn","");
-            console.log(whichBtn);
-            var whichTxtArea = $("textarea[name=" + whichBtn+"]");
-            console.log(whichTxtArea);
-            var whichTxtAreaInput = $("textarea[name=" + whichBtn+"]").val();
-            $(whichTxtArea).text(whichTxtAreaInput);
-        })
+        $(document).ready(function () {
+            startClock();
+            beforeAfter();
+            $(".saveBtn").on("click", function (event) {
+                event.preventDefault();
+                var whichBtn = $(this).attr("id").replace("btn", "");
+                console.log(whichBtn);
+                var whichTxtArea = $("textarea[name=" + whichBtn + "]");
+                console.log(whichTxtArea);
+                var whichTxtAreaInput = $("textarea[name=" + whichBtn + "]").val();
+                $(whichTxtArea).text(whichTxtAreaInput);
 
 
 
+                // stores input in local storage overrides what was previously stored
+                // localStorage.setItem("events", JSON.stringify(whichTxtAreaInput));            
+            });
+
+            function startClock() {
+                setInterval(function () {
+                    // TODO: use moment to get current time and store it in a variable
+                    // named currentTime.
+                    var currentTime = moment();
+                    // TODO: update the text of $currentTimeElem to be currentTime formatted to:
+                    // Hours:Minutes:Seconds AM/PM
+                    $("#currentDay").html(currentTime.format("dddd, MMMM Do YYYY, h:mm:ss a"))
+                }, 1000)
+            }
+
+            // set background based on time of day
+            function beforeAfter() {
+
+                var format = "HH:mm:ss";
+                var currentTimeHours = moment().format(format);
+                console.log(currentTimeHours);
+                function hourStringify(hour) {
+                    // invalid cases return 00
+                    if (hour <= 0 || hour >= 24) {
+                        return "00:00:00";
+                    }
+                    // if it's less than ten add a 0 in front
+                    if (hour < 10) {
+                        return "0" + hour + ":00:00";
+                    }
+                    // otherwise just add the end :00:00 to the number
+                    return hour + ":00:00";
+                }
+                var hourDivs = $(".hour");
+                for (var i = 0; i < hourDivs.length; i++) {
+                    var hourText = hourDivs[i].getAttribute("id");
+                   
+                    var checkTime = hourStringify(hourText);
+                    var timeToCheck = moment(checkTime, format);
+                    console.log(timeToCheck);
+                    if (timeToCheck.isBefore(currentTimeHours)) {
+                        hourDivs.append("class", "past");
+                    }
+                }
 
 
+            }
+
+
+
+        });
     </script>
 
 
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </body>
 
 </html>
