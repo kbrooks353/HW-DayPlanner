@@ -75,6 +75,7 @@
         $(document).ready(function () {
             startClock();
             beforeAfter();
+            var inputArray = [];
             $(".saveBtn").on("click", function (event) {
                 event.preventDefault();
                 var whichBtn = $(this).attr("id").replace("btn", "");
@@ -84,10 +85,12 @@
                 var whichTxtAreaInput = $("textarea[name=" + whichBtn + "]").val();
                 $(whichTxtArea).text(whichTxtAreaInput);
 
-
+                
+                inputArray.push(whichTxtAreaInput);
+                console.log(inputArray);
 
                 // stores input in local storage overrides what was previously stored
-                // localStorage.setItem("events", JSON.stringify(whichTxtAreaInput));            
+                localStorage.setItem("events", JSON.stringify(inputArray));            
             });
 
             function startClock() {
@@ -105,6 +108,7 @@
             function beforeAfter() {
 
                 var format = "HH:mm:ss";
+                var format2 = "HH";
                 var currentTimeHours = moment().format(format);
                 console.log(currentTimeHours);
                 function hourStringify(hour) {
@@ -122,16 +126,21 @@
                 var hourDivs = $("textarea");
                 for (var i = 0; i < hourDivs.length; i++) {
                     var hourText = hourDivs[i].getAttribute("id");
-                    var currentHours = moment(currentTimeHours, format);
+                    // take current hours and make it format2
+                    var currentHours = moment(currentTimeHours, format2);
+                    console.log(currentHours);
+                    
+                    // take the id of the textarea and make it into an hour string 
                     var checkTime = hourStringify(hourText);
+                    // take the checkTime and make it a moment format
                     var timeToCheck = moment(checkTime, format);
-                    console.log(timeToCheck);
+                    // compare hours and set the background of each textarea
                     if (timeToCheck.isBefore(currentHours)) {
-                        $("textarea").attr("class", "past");
+                        $(hourDivs[i]).attr("class", "past");
                     }else if (timeToCheck.isSame(currentHours)){
-                        $("textarea").attr("class", "present");
+                        $(hourDivs[i]).attr("class", "present");
                     }else {
-                        $("textarea").attr("class", "future");
+                        $(hourDivs[i]).attr("class", "future");
                     }
                 }
 
